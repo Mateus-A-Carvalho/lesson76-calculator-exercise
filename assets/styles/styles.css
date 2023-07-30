@@ -41,5 +41,14 @@ h1.main-heading {
 
 table {
   margin: 0 auto;
+  border-collapse: collapse;
 }
 
+ 
+
+button.btn {
+  display: block;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+}
