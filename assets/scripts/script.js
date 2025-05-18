@@ -1,65 +1,80 @@
 function createCalculator() {
-  return {
-    display: document.querySelector(".display"),
-    bntClear : document.querySelector(".btn-clear"),
 
-    run() {
+  return {
+
+    display: document.querySelector(".input"), // cachting the display element
+    bntClear: document.querySelector(`.btn-clear`), // cachting the clear button
+  
+    start() { // This method initializes the calculator
       this.clickButtons();
-      this.enterPressed();
+      this.pressEnter();
+    },
+
+    pressEnter() {
+      this.display.addEventListener(`keyup`, (e) => {
+        if(e.keyCode === 13) {
+          this.makeCount();
+        }
+      });
     },
 
     clickButtons() {
-      document.addEventListener("click", (e) => {
+      document.addEventListener("click", (e) => { //Cathing the click event;
         const element = e.target;
 
-        if (element.classList.contains('btn-num'))  this.showButtonsDisplay(element.innerText);
+        if(element.classList.contains(`btn-num`)) { // checking if the clicked element has a clss of btn-num
+          this.btnToDisplay(element.innerText); // if it does, we call the btnToDisplay method;
+        }
 
-        if(element.classList.contains('btn-clear')) this.eraseButton();
+        if(element.classList.contains(`btn-clear`)) { // checking if the clicked element has a clss of btn-clear
+          this.clearDisplay(); // if it does, we call the clearDisplay method;
+        }
 
-        if(element.classList.contains('btn-del')) this.eraseOne();
+        if(element.classList.contains(`btn-del`)) {
+          this.deleteOne();
+        }
 
-        if(element.classList.contains('btn-equal')) this.makeCount();
-      })
+        if(element.classList.contains(`btn-equal`)) { // checking if the clicked element has a clss of btn-eq
+          this.makeCount(); // if it does, we call the makeCount method;
+        }
+      }); // binding the event to the current instance of the calculator
+
+    },
+
+    btnToDisplay(value) {
+      this.display.value += value; // Here we take the parameters sended to add in display;
+    },
+
+    clearDisplay() {
+      this.display.value = ``;
+    },
+
+    deleteOne() {
+      this.display.value = this.display.value.slice(0, -1);
     },
 
     makeCount() {
-      let count = this.display.value;
-      
+      let count = this.display.value // Here we take the value of the display to make the count;
+
       try {
         count = eval(count);
 
         if(!count) {
-          alert('Invalid Value!');
+          alert(`Invalid count!!!`)
           return;
         }
 
-        this.display.value = count;
+        this.display.value = String(count); // Here we take the value of the display to make the count;
 
       } catch(e) {
-        alert('Invalide Value!');
-        return; 
-      }
-    },
+        alert(`Invalid count!!!`)
+        return;
+      };
 
-    enterPressed() {
-      this.addEventListener("keyup", (e) => {
-        if(e.keyCode === 13) this.makeCount();
-      })
-    },
-
-    showButtonsDisplay(btnValue) {
-      this.display.value += btnValue;
-    },
-
-    eraseButton() {
-      this.display.value = '';
-    },
-
-    eraseOne() {
-      this.display.value = this.display.value.slice(0, -1);
     }
+
   }
 }
 
 const calculator = createCalculator();
-calculator.run();
+calculator.start();
